@@ -5,7 +5,7 @@ reporting an issue to help us understand your environment, build settings
 and aid in debugging. Please attach this log to any issue that you report.
 ================================================================================
 
-Starting build at 10/08/11 18:30
+Starting build at 10/08/11 18:45
 
 Build details:
 
@@ -22,7 +22,7 @@ Script arguments:
    drupaniumapp
    Drupanium
    universal
-   iphone
+   ipad
    
 
 Building from: /Users/luis/Library/Application Support/Titanium/mobilesdk/osx/1.7.2/iphone
@@ -76,20 +76,4 @@ Generated the following stylecode code:
 
 	</dict>
 </plist>
-Starting Xcode compile with the following arguments:
-
-    xcodebuild
-    -target
-    Drupanium-universal
-    -configuration
-    Debug
-    -sdk
-    iphonesimulator4.3
-    GCC_PREPROCESSOR_DEFINITIONS=__LOG__ID__=00e5da0b-823f-4239-a692-e6e1881b3b02 DEPLOYTYPE=development TI_DEVELOPMENT=1 DEBUG=1 TI_VERSION=1.7.2 
-    IPHONEOS_DEPLOYMENT_TARGET=3.1
-    TARGETED_DEVICE_FAMILY=1,2
-    VALID_ARCHS=armv6 armv7 i386
-
-app_id = drupaniumapp
-
-
+Finishing build

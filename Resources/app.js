@@ -10,7 +10,7 @@ var tabGroup = Titanium.UI.createTabGroup();
 //
 var homeWin = Titanium.UI.createWindow({  
     title:'Home',
-    backgroundColor:'#fff'
+    backgroundColor:'#fff',
     url: 'home.js'
 });
 var homeTab = Titanium.UI.createTab({  
