@@ -33,9 +33,12 @@ scrollView.add(view);
 // Add our scrollview to the window
 win.add(scrollView);
 
+// Define the name of the view (view as in Drupal's view)
+var drupal_view = "content";
+
 // Define the url which contains the full url
 // in this case, we'll connecting to http://example.com/api/rest/node/1.json
-var url = SITE_PATH + 'node/1' + '.json';
+var url = SITE_PATH + 'views/content.json';
 
 // Create a conection inside the variable connection
 var connection = Titanium.Network.createHTTPClient();
@@ -54,37 +57,29 @@ connection.onload = function() {
 	
 	// Check if we have a connection
 	if(statusCode == 200) {
+		
 		// Save the responseText from the connection in the response variable
 		var response = connection.responseText;
 		
 		// Parse (build data structure) the JSON response into an object (data)
 		var data = JSON.parse(response);
 		
-		// Create a label for the node title
-		var nodeTitle = Ti.UI.createLabel({
-			// The text of the label will be the node title (data.title)
-			text: data.title,
-			color:'#000',
-			textAlign:'left',
-			font:{fontSize:16, fontWeight:'bold'},
-			top:10,
-			height:18
-		});
+		// Since the data is already an object and titanium request a data array
+		// we just pass it
+		// also see this example:
+		// var data = [{title:"Row 1"},{title:"Row 2"}];
+		// var table = Titanium.UI.createTableView({data:data});
+		// view.add(table);
+		var table = Titanium.UI.createTableView({data:data});
 		
-		// Create a label for the node body
-		var nodeBody = Ti.UI.createLabel({
-			// Because D7 uses an object for the body itself including the language
-			text: data.body.und[0].value,
-			color:'#000',
-			textAlign:'left',
-			font:{fontSize:14, fontWeight:'normal'},
-			top: 30,
-			height: 1000,
-		});
+		/**
+		 * how to make that when we select a title it goes
+		 * to a new window and open a the complete node
+		 */
 		
-		// Add both nodeTitle and nodeBody labels to our view
-		view.add(nodeTitle);
-		view.add(nodeBody);
+		// add our table to the view
+		view.add(table);
+		
 	}
 	else {
 		// Create a label for the node title
