@@ -5,7 +5,7 @@ reporting an issue to help us understand your environment, build settings
 and aid in debugging. Please attach this log to any issue that you report.
 ================================================================================
 
-Starting build at 10/08/11 18:45
+Starting build at 10/09/11 00:46
 
 Build details:
 
@@ -22,7 +22,7 @@ Script arguments:
    drupaniumapp
    Drupanium
    universal
-   ipad
+   iphone
    
 
 Building from: /Users/luis/Library/Application Support/Titanium/mobilesdk/osx/1.7.2/iphone
