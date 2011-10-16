@@ -33,6 +33,7 @@ var usernameTextfield = Titanium.UI.createTextField({
 	borderWidth:2,
 	borderColor:'#bbb',
 	borderRadius:5,
+	autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
 });
 
 // Add the textfield to the window
@@ -61,6 +62,8 @@ var passwordTextfield = Titanium.UI.createTextField({
 	borderWidth:2,
 	borderColor:'#bbb',
 	borderRadius:5,
+	autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
+	passwordMask:true,
 });
 
 // Add the textarea to the window
@@ -91,29 +94,24 @@ loginButton.addEventListener('click', function() {
 
 	// Create a conection inside the variable connection
 	var connection = Titanium.Network.createHTTPClient();
-
+	
+	connection.setRequestHeader('Content-Type','application/json; charset=utf-8');
+	
 	// Open the connection
 	connection.open("POST",url);
 
 	// Send the connection
 	connection.send(user);
-
+	
 	// When the connection loads we do:
 	connection.onload = function() {
 		// Save the status of the connection in a variable
 		// this will be used to see if we have a connection (200) or not
 		var statusCode = connection.status;
-		
+		alert("Status is: " + statusCode);
 		// Check if we have a connection
 		if(statusCode == 200) {
-			// Save the responseText from the connection in the response variable			
-			var response = connection.responseText;
 			
-			alert(response);
-			
-			// Parse (build data structure) the JSON response into an object (data)
-			var data = JSON.parse(response);
-			Ti.API.info("Data is: " + response);
 		}
 	}
 

@@ -5,7 +5,7 @@ reporting an issue to help us understand your environment, build settings
 and aid in debugging. Please attach this log to any issue that you report.
 ================================================================================
 
-Starting build at 10/16/11 06:06
+Starting build at 10/16/11 06:33
 
 Build details:
 
@@ -44,18 +44,36 @@ OTHER_LDFLAGS[sdk=iphonesimulator*]=$(inherited) -weak_framework iAd
 old contents
 
 
+Generated the following stylecode code:
 
-Exception detected in script:
-Traceback (most recent call last):
-  File "/Users/luis/Library/Application Support/Titanium/mobilesdk/osx/1.7.2/iphone/builder.py", line 899, in main
-    force_xcode = write_debugger_plist(debug_plist)
-  File "/Users/luis/Library/Application Support/Titanium/mobilesdk/osx/1.7.2/iphone/builder.py", line 714, in write_debugger_plist
-    shutil.move(tempfile, debuggerplist)
-  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/pFinishing build
-py", line 292, in move
-    copy2(src, real_dst)
-  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/shutil.py", line 127, in copy2
-    copyfile(src, dst)
-  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/shutil.py", line 81, in copyfile
-    with open(src, 'rb') as fsrc:
-IOError: [Errno 2] No such file or directory: u'/Users/luis/Titanium Studio Workspace/Drupanium/build/iphone/Resources/debugger.plist.tmp'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>classes</key>
+		<dict>
+</dict>
+
+		<key>classes_density</key>
+		<dict>
+</dict>
+
+		<key>ids</key>
+		<dict>
+</dict>
+
+		<key>ids_density</key>
+		<dict>
+</dict>
+
+		<key>tags</key>
+		<dict>
+</dict>
+
+		<key>tags_density</key>
+		<dict>
+</dict>
+
+	</dict>
+</plist>
+Finishing build
