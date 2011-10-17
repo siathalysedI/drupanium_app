@@ -89,22 +89,31 @@ saveButton.addEventListener('click', function() {
 	
 	var node = {
 		title: nodeTitleTextfield.value,
+		/*
+		body: {
+			und: {
+				0: {
+					value: nodeBodyTextarea.value,
+				}
+			}
+		},
+		*/
 		body: nodeBodyTextarea.value,
 		type: "article",
 	}
 	
 	// Define the url which contains the full url
 	// in this case, we'll connecting to http://example.com/api/rest/node/1.json
-	var url = SITE_PATH + 'node/1' + '.json';
+	var url = SITE_PATH + 'node/';
 
 	// Create a conection inside the variable connection
 	var connection = Titanium.Network.createHTTPClient();
 
 	// Open the connection
-	connection.open("GET",url);
+	connection.open("POST",url);
 
 	// Send the connection
-	connection.send();
+	connection.send(node);
 
 	// When the connection loads we do:
 	connection.onload = function() {
@@ -114,8 +123,45 @@ saveButton.addEventListener('click', function() {
 		
 		// Check if we have a connection
 		if(statusCode == 200) {
-			// Save the responseText from the connection in the response variable
+			// Save the responseText from the connection in the response variable		
+			var response = connection.responseText;
 			
+			// Parse (build data structure) the JSON response into an object (data)
+			var data = JSON.parse(response);
+			
+			// the reponse contains the nid and the uri
+			//alert(data);
+			
+			alert("Content created with nid: " + data.nid);
+			
+			// Redirect to the new content
+			// Define a new Window "nodeWindow"
+            var nodeWindow = Titanium.UI.createWindow({
+            	// the window is not here, but in the file get-node-by-nid.js
+            	// so we load it
+            	url:'get-node-by-nid.js',
+            	
+            	// define some basic properties
+            	backgroundColor:'#fff',
+            	
+            	// Define the title of our new window using the node title
+            	// e.rowData contains the information we defined when we passed it
+            	// to Titanium.UI.createTableView using the property "data"
+            	// so e.rowData.title = data.title for each of the rows in the table
+            	
+            	
+            	// The same for the nid
+            	// We send the nid as an property in this window and the 
+            	// get-node-by-nid file will recognize it and use it
+            	nid:data.nid,
+            	
+            	// a boolean indicating if the view should receive touch events (true, default) or forward them to peers (false)
+            	touchEnabled: true
+            });
+            
+            // order the app to open the nodeWindow window in the current Tab
+            Titanium.UI.currentTab.open(nodeWindow,{animated:true});
+            
 		}
 	}
 

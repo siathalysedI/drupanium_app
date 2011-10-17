@@ -69,6 +69,9 @@ connection.onload = function() {
 		// Parse (build data structure) the JSON response into an object (data)
 		var data = JSON.parse(response);
 		
+		// ensure that the window title is set
+		win.title = data.title;
+		
 		// Create a label for the node title
 		var nodeTitle = Ti.UI.createLabel({
 			// The text of the label will be the node title (data.title)

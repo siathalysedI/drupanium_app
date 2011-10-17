@@ -69,7 +69,7 @@ var passwordTextfield = Titanium.UI.createTextField({
 // Add the textarea to the window
 win.add(passwordTextfield);
 
-// Add the save button
+// Add the login button
 var loginButton = Titanium.UI.createButton({
 	title:'Login',
 	height:40,
@@ -80,7 +80,7 @@ var loginButton = Titanium.UI.createButton({
 // Add the button to the window
 win.add(loginButton);
 
-// Add the event listener for when the button is created
+//Add the event listener for when the button is created
 loginButton.addEventListener('click', function() {
 	
 	var user = {
@@ -108,12 +108,68 @@ loginButton.addEventListener('click', function() {
 		// Save the status of the connection in a variable
 		// this will be used to see if we have a connection (200) or not
 		var statusCode = connection.status;
-		alert("Status is: " + statusCode);
 		// Check if we have a connection
 		if(statusCode == 200) {
+			alert("Login successful");
 			
+			var response = connection.responseText;
+			
+			// Parse (build data structure) the JSON response into an object (data)
+			var data = JSON.parse(response);
+			
+			// alert(data);
+			
+			// Set a global variable
+			Ti.App.userSessionId = data.sessid;
+			Ti.App.userSessionName = data.session_name;
+		}
+		else {
+			alert("There was an error");
 		}
 	}
+});
 
+//Add the logout button
+var logoutButton = Titanium.UI.createButton({
+	title:'Logout',
+	height:40,
+	width:200,
+	top:220
+});
+
+// Add the button to the window
+win.add(logoutButton);
+
+//Add the event listener for when the button is created
+logoutButton.addEventListener('click', function() {
+	
+	// Define the url which contains the full url
+	// in this case, we'll connecting to http://example.com/api/rest/node/1.json
+	var url = SITE_PATH + 'user/logout';
+
+	// Create a conection inside the variable connection
+	var connection = Titanium.Network.createHTTPClient();
+	
+	connection.setRequestHeader('Content-Type','application/json; charset=utf-8');
+	
+	// Open the connection
+	connection.open("POST",url);
+
+	// Send the connection
+	connection.send();
+	
+	// When the connection loads we do:
+	connection.onload = function() {
+		// Save the status of the connection in a variable
+		// this will be used to see if we have a connection (200) or not
+		var statusCode = connection.status;
+		// Check if we have a connection
+		if(statusCode == 200) {
+			alert("Session terminated");
+		}
+		else {
+			alert("There was an error");
+		}
+	}
 });
 
