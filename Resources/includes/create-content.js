@@ -89,7 +89,6 @@ saveButton.addEventListener('click', function() {
 	
 	var node = {
 		title: nodeTitleTextfield.value,
-		/*
 		body: {
 			und: {
 				0: {
@@ -97,10 +96,10 @@ saveButton.addEventListener('click', function() {
 				}
 			}
 		},
-		*/
-		body: nodeBodyTextarea.value,
 		type: "article",
 	}
+	
+	alert(node);
 	
 	// Define the url which contains the full url
 	// in this case, we'll connecting to http://example.com/api/rest/node/1.json
