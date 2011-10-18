@@ -120,8 +120,9 @@ loginButton.addEventListener('click', function() {
 			// alert(data);
 			
 			// Set a global variable
-			Ti.App.userSessionId = data.sessid;
-			Ti.App.userSessionName = data.session_name;
+			Titanium.App.Properties.setInt("userUid", data.user.uid);
+			Titanium.App.Properties.setInt("userSessionId", data.sessid);
+			Titanium.App.Properties.setInt("userSessionName", data.sesion_name)
 		}
 		else {
 			alert("There was an error");
