@@ -18,6 +18,11 @@ Ti.include('../config.js');
 // Define the variable win to contain the current window
 var win = Ti.UI.currentWindow;
 
+// Create a user variable to hold some information about the user
+var user = {
+	uid: Titanium.App.Properties.getInt("userUid", 0),
+}
+
 // Create the scrollview to contain the view
 var scrollView = Titanium.UI.createScrollView({
 	contentWidth:'auto',
@@ -97,6 +102,59 @@ connection.onload = function() {
 		// Add both nodeTitle and nodeBody labels to our view
 		view.add(nodeTitle);
 		view.add(nodeBody);
+		
+		// Create the flag button
+		var flagButton = Titanium.UI.createButton({
+			title:'Bookmark this',
+			height:40,
+			width:200,
+			top:1000
+		});
+
+		// Add the flag button to the view
+		view.add(flagButton);
+		
+
+		//Add the event listener for when the button is created
+		flagButton.addEventListener('click', function() {
+			
+			// Define the url which contains the full url
+			// in this case, we'll connecting to http://example.com/api/rest/node/1.json
+			var flagURL = SITE_PATH + 'flag/flag.json';
+			
+			var flag = {
+				flag_name: "bookmarks",
+				content_id: win.nid,
+				action: "flag",
+				uid: user.uid,
+			}
+
+			// Create a conection inside the variable connection
+			var connection = Titanium.Network.createHTTPClient();
+			
+			connection.setRequestHeader('Content-Type','application/json; charset=utf-8');
+			
+			// Open the connection
+			connection.open("POST",flagURL);
+
+			// Send the connection
+			connection.send(flag);
+			
+			// When the connection loads we do:
+			connection.onload = function() {
+				// Save the status of the connection in a variable
+				// this will be used to see if we have a connection (200) or not
+				var statusCode = connection.status;
+				
+				// Check if we have a connection
+				if(statusCode == 200) {
+					alert("Flagged");
+				}
+				else {
+					alert("I'm sorry, there was an error " + statusCode);
+				}
+			}
+		});
 	}
 	else {
 		// Create a label for the node title

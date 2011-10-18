@@ -10,12 +10,12 @@
 // create table view data object
 var data = [
 	{title:'Get Node (Working)', hasChild:true, test:'includes/get-node.js'},
-	{title:'Create content', hasChild:true, test:'includes/create-content.js'},
-	{title:'Login', hasChild:true, test:'includes/login.js'},
+	{title:'Create content (Working)', hasChild:true, test:'includes/create-content.js'},
+	{title:'Login (Working)', hasChild:true, test:'includes/login.js'},
 	{title:'Create account', hasChild:true, test:'includes/create-account.js'},
 	{title:'View all content (Working)', hasChild:true, test:'includes/view-all-content.js'},
 	{title:'Search (Working)', hasChild:true, test:'includes/search.js'},
-	{title:'Favorites', hasChild:true, test:'includes/favorites.js'},
+	{title:'Favorites (Working)', hasChild:true, test:'includes/favorites.js'},
 ];
 
 // create table view
