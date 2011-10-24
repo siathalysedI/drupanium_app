@@ -49,7 +49,7 @@ win.add(scrollView);
 // Define the url which contains the full url
 // See how we build the url using the win.nid which is 
 // the nid property we pass to this file when we create the window
-var url = SITE_PATH + 'node/' + win.nid + '.json';
+var url = SITE_PATH + 'comment/' + win.cid + '.json';
 
 // Create a conection inside the variable connection
 var connection = Titanium.Network.createHTTPClient();
@@ -68,7 +68,6 @@ connection.onload = function() {
 	
 	// Check if we have a connection
 	if(statusCode == 200) {
-		
 		// Save the responseText from the connection in the response variable
 		var response = connection.responseText;
 		
@@ -76,12 +75,12 @@ connection.onload = function() {
 		var data = JSON.parse(response);
 		
 		// ensure that the window title is set
-		win.title = data.title;
+		win.title = data.subject;
 		
 		// Create a label for the node title
-		var nodeTitle = Ti.UI.createLabel({
+		var commentTitle = Ti.UI.createLabel({
 			// The text of the label will be the node title (data.title)
-			text: data.title,
+			text: data.subject,
 			color:'#000',
 			textAlign:'left',
 			font:{fontSize:16, fontWeight:'bold'},
@@ -90,9 +89,9 @@ connection.onload = function() {
 		});
 		
 		// Create a label for the node body
-		var nodeBody = Ti.UI.createLabel({
+		var commentBody = Ti.UI.createLabel({
 			// Because D7 uses an object for the body itself including the language
-			text: data.body.und[0].value,
+			text: data.comment_body.und[0].value,
 			color:'#000',
 			textAlign:'left',
 			font:{fontSize:14, fontWeight:'normal'},
@@ -101,84 +100,8 @@ connection.onload = function() {
 		});
 		
 		// Add both nodeTitle and nodeBody labels to our view
-		view.add(nodeTitle);
-		view.add(nodeBody);
-		
-		// Create the flag button
-		var flagButton = Titanium.UI.createButton({
-			title:'Bookmark this',
-			height:40,
-			width:200,
-			top:1000
-		});
-
-		// Add the flag button to the view
-		view.add(flagButton);
-
-		//Add the event listener for when the button is created
-		flagButton.addEventListener('click', function() {
-			
-			// Define the url which contains the full url
-			// in this case, we'll connecting to http://example.com/api/rest/node/1.json
-			var flagURL = SITE_PATH + 'flag/flag.json';
-			
-			var flag = {
-				flag_name: "bookmarks",
-				content_id: win.nid,
-				action: "flag",
-				uid: user.uid,
-			}
-
-			// Create a conection inside the variable connection
-			var connection = Titanium.Network.createHTTPClient();
-			
-			connection.setRequestHeader('Content-Type','application/json; charset=utf-8');
-			
-			// Open the connection
-			connection.open("POST",flagURL);
-
-			// Send the connection
-			connection.send(flag);
-			
-			// When the connection loads we do:
-			connection.onload = function() {
-				// Save the status of the connection in a variable
-				// this will be used to see if we have a connection (200) or not
-				var statusCode = connection.status;
-				
-				// Check if we have a connection
-				if(statusCode == 200) {
-					alert("Flagged");
-				}
-				else {
-					alert("I'm sorry, there was an error " + statusCode);
-				}
-			}
-		});
-		
-		// create tab group
-		var tabGroup = win.tabGroup;
-		
-		var commentsWin = Titanium.UI.createWindow({  
-		    title:'Comments',
-		    backgroundColor:'#fff',
-		    url: 'comments.js',
-		    nid: data.nid,
-		    touchEnabled: true,
-		});
-		
-		var commentsTab = Titanium.UI.createTab({  
-		    icon:'../KS_nav_views.png',
-		    title:'Comments',
-		    win: commentsWin,
-		});
-		
-		// Add badge to the comments tab to show how many comments this node have
-		commentsTab.badge = 3;
-		
-		// Add the tab to the tabGroup
-		tabGroup.addTab(commentsTab);
-		Titanium.UI.commentsTab.open(commentsWin,{animated:true});
+		view.add(commentTitle);
+		view.add(commentBody);
 		
 	}
 	else {

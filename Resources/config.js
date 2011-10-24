@@ -5,4 +5,4 @@
  */
 
 // Set this to the base path of your rest server (add trailing slash)
-var SITE_PATH = 'http://192.168.1.97/drupanium/api/rest/';
+var SITE_PATH = 'http://api.drupanium.org/api/rest/';
