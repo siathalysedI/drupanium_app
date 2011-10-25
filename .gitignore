@@ -1,3 +1,5 @@
 build
+build/
 tmp
+tmp/
 .DS_Store
