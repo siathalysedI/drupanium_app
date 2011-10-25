@@ -5,7 +5,7 @@ reporting an issue to help us understand your environment, build settings
 and aid in debugging. Please attach this log to any issue that you report.
 ================================================================================
 
-Starting build at 10/17/11 22:53
+Starting build at 10/24/11 23:40
 
 Build details:
 
@@ -18,7 +18,7 @@ Script arguments:
    /Users/luis/Library/Application Support/Titanium/mobilesdk/osx/1.7.2/iphone/builder.py
    simulator
    4.3
-   /Users/luis/Titanium Studio Workspace/Drupanium
+   /Users/luis/Dropbox/Titanium/Mac/Drupanium
    drupaniumapp
    Drupanium
    universal
@@ -32,7 +32,7 @@ Xcode path is: /Developer
 
 
 githash=97c3689, existing_git_hash=97c3689
-writing contents of /Users/luis/Titanium Studio Workspace/Drupanium/build/iphone/project.xcconfig:
+writing contents of /Users/luis/Dropbox/Titanium/Mac/Drupanium/build/iphone/project.xcconfig:
 
 TI_VERSION=1.7.2
 TI_SDK_DIR=/Users/luis/Library/Application Support/Titanium/mobilesdk/osx/$(TI_VERSION)/iphone
