@@ -104,83 +104,92 @@ connection.onload = function() {
 		view.add(nodeTitle);
 		view.add(nodeBody);
 		
-		// Create the flag button
-		var flagButton = Titanium.UI.createButton({
-			title:'Bookmark this',
-			height:40,
-			width:200,
-			top:1000
+		// Add the buttons bar 
+		var buttonsBar = Titanium.UI.createButtonBar({
+			labels:['Comments (' + data.comment_count + ')', 'Add comment', 'Bookmark this'],
+			backgroundColor:'blue'
 		});
+		
+		// Add a flexible space so the buttons are centered
+		var flexSpace = Titanium.UI.createButton({
+			systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
+		}); 
+		
+		// Add the toolbar to the window, note that we add the flexible space,
+		// then the buttonsBar and then agin another flexible space
+		win.setToolbar([flexSpace,buttonsBar,flexSpace]);
 
-		// Add the flag button to the view
-		view.add(flagButton);
-
-		//Add the event listener for when the button is created
-		flagButton.addEventListener('click', function() {
+		// Add an event listerner for clicks on the buttons bar
+		buttonsBar.addEventListener('click', function(e) {
+			// The buttons are indexed (starting from 0)
+			// So we have to set every case
 			
-			// Define the url which contains the full url
-			// in this case, we'll connecting to http://example.com/api/rest/node/1.json
-			var flagURL = SITE_PATH + 'flag/flag.json';
-			
-			var flag = {
-				flag_name: "bookmarks",
-				content_id: win.nid,
-				action: "flag",
-				uid: user.uid,
-			}
-
-			// Create a conection inside the variable connection
-			var connection = Titanium.Network.createHTTPClient();
-			
-			connection.setRequestHeader('Content-Type','application/json; charset=utf-8');
-			
-			// Open the connection
-			connection.open("POST",flagURL);
-
-			// Send the connection
-			connection.send(flag);
-			
-			// When the connection loads we do:
-			connection.onload = function() {
-				// Save the status of the connection in a variable
-				// this will be used to see if we have a connection (200) or not
-				var statusCode = connection.status;
+			// Clicked on comments.
+			if(e.index == 0) {
+				// Create a new window to load the comments.js file
+				var commentsWin = Titanium.UI.createWindow({  
+				    title:'Comments',
+				    backgroundColor:'#fff',
+				    url: 'comments.js',
+				    // Send the nid to the next window
+				    nid: data.nid,
+				    touchEnabled: true,
+				    animated: true,
+				});
 				
-				// Check if we have a connection
-				if(statusCode == 200) {
-					alert("Flagged");
-				}
-				else {
-					alert("I'm sorry, there was an error " + statusCode);
-				}
+				// Order Titanium to open the window commentsWin in the same tab
+				Titanium.UI.currentTab.open(commentsWin);
+			} // End the comments case
+			
+			// Clicked on the add comment button
+			else if(e.index == 1) {
+				// Not working
+				alert("Create form to add comment here");
 			}
-		});
-		
-		// create tab group
-		var tabGroup = win.tabGroup;
-		
-		var commentsWin = Titanium.UI.createWindow({  
-		    title:'Comments',
-		    backgroundColor:'#fff',
-		    url: 'comments.js',
-		    nid: data.nid,
-		    touchEnabled: true,
-		});
-		
-		var commentsTab = Titanium.UI.createTab({  
-		    icon:'../KS_nav_views.png',
-		    title:'Comments',
-		    win: commentsWin,
-		});
-		
-		// Add badge to the comments tab to show how many comments this node have
-		commentsTab.badge = 3;
-		
-		// Add the tab to the tabGroup
-		tabGroup.addTab(commentsTab);
-		Titanium.UI.commentsTab.open(commentsWin,{animated:true});
-		
-	}
+			
+			// Clicked on bookmark this
+			else if(e.index == 2) {
+				// @todo this gives an error when the node is already flagged
+				
+				// Define the url which contains the full url
+				// in this case, we'll connecting to http://example.com/api/rest/node/1.json
+				var flagURL = SITE_PATH + 'flag/flag.json';
+				
+				var flag = {
+					flag_name: "bookmarks",
+					content_id: win.nid,
+					action: "flag",
+					uid: user.uid,
+				}
+
+				// Create a conection inside the variable connection
+				var connection = Titanium.Network.createHTTPClient();
+				
+				connection.setRequestHeader('Content-Type','application/json; charset=utf-8');
+				
+				// Open the connection
+				connection.open("POST",flagURL);
+
+				// Send the connection
+				connection.send(flag);
+				
+				// When the connection loads we do:
+				connection.onload = function() {
+					// Save the status of the connection in a variable
+					// this will be used to see if we have a connection (200) or not
+					var statusCode = connection.status;
+					
+					// Check if we have a connection
+					if(statusCode == 200) {
+						alert("Flagged");
+					}
+					else {
+						alert("I'm sorry, there was an error " + statusCode);
+					}
+				}
+			} // End the flag case
+		}); // End the buttons bar event listener
+	} // End the statusCode 200 
 	else {
 		// Create a label for the node title
 		var errorMessage = Ti.UI.createLabel({

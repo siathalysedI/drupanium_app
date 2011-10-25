@@ -15,8 +15,6 @@
 // Include our config file
 Ti.include('../config.js');
 
-alert("This is loading");
-
 // Define the variable win to contain the current window
 var win = Ti.UI.currentWindow;
 
