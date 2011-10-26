@@ -106,6 +106,7 @@ connection.onload = function() {
 		
 		// Add the buttons bar 
 		var buttonsBar = Titanium.UI.createButtonBar({
+			// data.comment_count has the number of comments the node has
 			labels:['Comments (' + data.comment_count + ')', 'Add comment', 'Bookmark this'],
 			backgroundColor:'blue'
 		});
@@ -139,12 +140,23 @@ connection.onload = function() {
 				
 				// Order Titanium to open the window commentsWin in the same tab
 				Titanium.UI.currentTab.open(commentsWin);
+				
 			} // End the comments case
 			
 			// Clicked on the add comment button
 			else if(e.index == 1) {
 				// Not working
-				alert("Create form to add comment here");
+				var addCommentWin = Titanium.UI.createWindow({
+					title: 'Add comment',
+					backgroundColor: '#fff',
+					url: 'create-comment.js',
+					nid: data.nid,
+					touchEnabled: true,
+					animated: true,
+				});
+				
+				// Order Titanium to open the window in the same tabe
+				Titanium.UI.currentTab.open(addCommentWin);
 			}
 			
 			// Clicked on bookmark this

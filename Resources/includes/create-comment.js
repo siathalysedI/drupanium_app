@@ -7,16 +7,16 @@
 // Include our config file
 Ti.include('../config.js');
 
+// Define the variable win to contain the current window
+var win = Ti.UI.currentWindow;
+
 //Create a user variable to hold some information about the user
 var user = {
 	uid: Titanium.App.Properties.getInt("userUid", 0),
 }
 
-// Define the variable win to contain the current window
-var win = Ti.UI.currentWindow;
-
 // Create the label for the node title
-var nodeTitleLabel = Titanium.UI.createLabel({
+var commentTitleLabel = Titanium.UI.createLabel({
 	text:'Title',
 	font:{fontSize:14, fontWeight: "bold"},
 	left:10,
@@ -26,10 +26,10 @@ var nodeTitleLabel = Titanium.UI.createLabel({
 });
 
 // Add the label to the window
-win.add(nodeTitleLabel);
+win.add(commentTitleLabel);
 
 // Create the textfield to hold the node title
-var nodeTitleTextfield = Titanium.UI.createTextField({
+var commentTitleTextfield = Titanium.UI.createTextField({
 	height:35,
 	top:30,
 	left:10,
@@ -41,10 +41,10 @@ var nodeTitleTextfield = Titanium.UI.createTextField({
 });
 
 // Add the textfield to the window
-win.add(nodeTitleTextfield);
+win.add(commentTitleTextfield);
 
 // Create the label for the node body
-var nodeBodyLabel = Titanium.UI.createLabel({
+var commentBodyLabel = Titanium.UI.createLabel({
 	text:'Body',
 	font:{fontSize:14, fontWeight:"bold"},
 	left:10,
@@ -54,10 +54,10 @@ var nodeBodyLabel = Titanium.UI.createLabel({
 });
 
 // Add the label to the window
-win.add(nodeBodyLabel);
+win.add(commentBodyLabel);
 
 // Create the textarea to hold the body
-var nodeBodyTextarea = Titanium.UI.createTextArea({
+var commentBodyTextarea = Titanium.UI.createTextArea({
 	editable: true,
 	value:'',
 	height:150,
@@ -75,7 +75,7 @@ var nodeBodyTextarea = Titanium.UI.createTextArea({
 });
 
 // Add the textarea to the window
-win.add(nodeBodyTextarea);
+win.add(commentBodyTextarea);
 
 
 // Add the save button
@@ -92,19 +92,18 @@ win.add(saveButton);
 // Add the event listener for when the button is created
 saveButton.addEventListener('click', function() {
 	
-	var node = {
-		title: nodeTitleTextfield.value,
+	var comment = {
+		title: commentTitleTextfield.value,
 		body: {
 			und: {
 				0: {
-					value: nodeBodyTextarea.value,
+					value: commentBodyTextarea.value,
 				}
 			}
 		},
-		type: "article",
 	}
 	
-	alert(node);
+	alert(comment);
 	
 	// Define the url which contains the full url
 	// in this case, we'll connecting to http://example.com/api/rest/node/1.json
