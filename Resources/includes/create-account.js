@@ -110,34 +110,44 @@ var createAccountButton = Titanium.UI.createButton({
 win.add(createAccountButton);
 
 createAccountButton.addEventListener('click', function() {
-		var account = {
+		var newUser = {
 			name: usernameTextfield.value,
-			password: passwordTextfield.value,
+			pass: passwordTextfield.value,
 			mail: emailTextfield.value,
 		}
+		
+		var account = JSON.stringify(newUser);
 				
 		// Define the url which contains the full url
 		// in this case, we'll connecting to http://example.com/api/rest/node/1.json
-		var url = SITE_PATH + 'user?'+account;
+		var url = SITE_PATH + 'user';
 
 		// Create a conection inside the variable connection
 		var connection = Titanium.Network.createHTTPClient();
 		
+		connection.onerror = function(e) {
+			Ti.UI.createAlertDialog({
+				title: "Error",
+				message: e.error(),
+			}).show();
+			Ti.API.info("IN ERROR " + e.error);
+		}
+		
 		connection.setRequestHeader('Content-Type','application/json; charset=utf-8');
+		
+		connection.setTimeout(20000);
 		
 		// Open the connection
 		connection.open("POST",url);
 
 		// Send the connection
-		connection.send();
+		connection.send(newUser);
 		
 		// When the connection loads we do:
 		connection.onload = function() {
 			// Save the status of the connection in a variable
 			// this will be used to see if we have a connection (200) or not
 			var statusCode = connection.status;
-			
-			alert("status is: " + statusCode);
 			
 			// Check if we have a connection
 			if(statusCode == 200) {
