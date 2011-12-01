@@ -90,39 +90,64 @@ loginButton.addEventListener('click', function() {
 	
 	// Define the url which contains the full url
 	// in this case, we'll connecting to http://example.com/api/rest/node/1.json
-	var url = SITE_PATH + 'user/login';
+	var url = REST_PATH + 'user/login';
 
 	// Create a conection inside the variable connection
-	var connection = Titanium.Network.createHTTPClient();
+	var xhr = Titanium.Network.createHTTPClient();
 	
-	connection.setRequestHeader('Content-Type','application/json; charset=utf-8');
+	xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
 	
 	// Open the connection
-	connection.open("POST",url);
+	xhr.open("POST",url);
 
 	// Send the connection
-	connection.send(user);
+	xhr.send(user);
 	
 	// When the connection loads we do:
-	connection.onload = function() {
+	xhr.onload = function() {
 		// Save the status of the connection in a variable
 		// this will be used to see if we have a connection (200) or not
 		var statusCode = connection.status;
 		// Check if we have a connection
 		if(statusCode == 200) {
-			alert("Login successful");
 			
-			var response = connection.responseText;
+			var response = xhr.responseText;
 			
 			// Parse (build data structure) the JSON response into an object (data)
 			var data = JSON.parse(response);
 			
 			// alert(data);
+			alert("Login successful with uid " + data.user.uid);
 			
 			// Set a global variable
 			Titanium.App.Properties.setInt("userUid", data.user.uid);
 			Titanium.App.Properties.setInt("userSessionId", data.sessid);
-			Titanium.App.Properties.setInt("userSessionName", data.sesion_name)
+			Titanium.App.Properties.setInt("userSessionName", data.sesion_name);
+			
+			// Create another connection to get the user
+			var xhr2 = Titanium.Network.createHTTPClient();
+			
+			var getUser = REST_PATH + 'user/' + data.user.uid + '.json';
+			
+			xhr2.open("GET", getUser);
+			xhr2.send();
+			
+			xhr2.onload = function() {
+				var userStatusCode = xhr2.status;
+				
+				alert(userStatusCode);
+				
+				if(userStatusCode == 200) {
+					var userResponse = xhr2.responseText;
+					var user = JSON.parse(userResponse);
+					
+					// alert(user);
+					
+					alert("Welcome " + user.name);
+					
+					Titanium.App.Properties.setString("userName", user.name);
+				}
+			}
 		}
 		else {
 			alert("There was an error");
@@ -146,24 +171,24 @@ logoutButton.addEventListener('click', function() {
 	
 	// Define the url which contains the full url
 	// in this case, we'll connecting to http://example.com/api/rest/node/1.json
-	var url = SITE_PATH + 'user/logout';
+	var url = REST_PATH + 'user/logout';
 
 	// Create a conection inside the variable connection
-	var connection = Titanium.Network.createHTTPClient();
+	var xhr = Titanium.Network.createHTTPClient();
 	
-	connection.setRequestHeader('Content-Type','application/json; charset=utf-8');
+	xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
 	
 	// Open the connection
-	connection.open("POST",url);
+	xhr.open("POST",url);
 
 	// Send the connection
-	connection.send();
+	xhr.send();
 	
 	// When the connection loads we do:
-	connection.onload = function() {
+	xhr.onload = function() {
 		// Save the status of the connection in a variable
 		// this will be used to see if we have a connection (200) or not
-		var statusCode = connection.status;
+		var statusCode = xhr.status;
 		// Check if we have a connection
 		if(statusCode == 200) {
 			alert("Session terminated");
