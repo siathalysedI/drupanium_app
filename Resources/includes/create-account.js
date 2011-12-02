@@ -120,12 +120,12 @@ createAccountButton.addEventListener('click', function() {
 				
 		// Define the url which contains the full url
 		// in this case, we'll connecting to http://example.com/api/rest/node/1.json
-		var url = SITE_PATH + 'user';
+		var url = REST_PATH + 'user';
 
 		// Create a conection inside the variable connection
-		var connection = Titanium.Network.createHTTPClient();
+		var xhr = Titanium.Network.createHTTPClient();
 		
-		connection.onerror = function(e) {
+		xhr.onerror = function(e) {
 			Ti.UI.createAlertDialog({
 				title: "Error",
 				message: e.error(),
@@ -133,27 +133,27 @@ createAccountButton.addEventListener('click', function() {
 			Ti.API.info("IN ERROR " + e.error);
 		}
 		
-		connection.setRequestHeader('Content-Type','application/json; charset=utf-8');
+		xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
 		
-		connection.setTimeout(20000);
+		xhr.setTimeout(20000);
 		
 		// Open the connection
-		connection.open("POST",url);
+		xhr.open("POST",url);
 
 		// Send the connection
-		connection.send(newUser);
+		xhr.send(newUser);
 		
 		// When the connection loads we do:
-		connection.onload = function() {
+		xhr.onload = function() {
 			// Save the status of the connection in a variable
 			// this will be used to see if we have a connection (200) or not
-			var statusCode = connection.status;
+			var statusCode = xhr.status;
 			
 			// Check if we have a connection
 			if(statusCode == 200) {
 				alert("Account created");
 				
-				var response = connection.responseText;
+				var response = xhr.responseText;
 				
 				// Parse (build data structure) the JSON response into an object (data)
 				var data = JSON.parse(response);
