@@ -43,7 +43,7 @@ var homeTab = Titanium.UI.createTab({
 var userWin = Ti.UI.createWindow({
 	title: "User",
 	backgroundColor: '#fff',
-	url: 'user.js',
+	url: 'includes/user.js',
 });
 
 // Create the user tab
@@ -63,7 +63,7 @@ else {
 var searchWin = Ti.UI.createWindow({
 	title: "Search",
 	backgroundColor: '#fff',
-	url: 'search.js'
+	url: 'includes/search.js'
 });
 
 // Create the search tab
@@ -77,7 +77,7 @@ var searchTab = Ti.UI.createTab({
 var mapsWin = Ti.UI.createWindow({
 	title: "Maps",
 	backgroundColor: '#fff',
-	url: 'maps.js'
+	url: 'includes/maps.js'
 });
 
 // Create the tab window
