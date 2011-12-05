@@ -49,28 +49,28 @@ win.add(scrollView);
 // Define the url which contains the full url
 // See how we build the url using the win.nid which is 
 // the nid property we pass to this file when we create the window
-var url = SITE_PATH + 'node/' + win.nid + '.json';
+var url = REST_PATH + 'node/' + win.nid + '.json';
 
-// Create a conection inside the variable connection
-var connection = Titanium.Network.createHTTPClient();
+// Create a conection inside the variable xhr
+var xhr = Titanium.Network.createHTTPClient();
 
-// Open the connection
-connection.open("GET",url);
+// Open the xhr
+xhr.open("GET",url);
 
-// Send the connection
-connection.send();
+// Send the xhr
+xhr.send();
 
-// When the connection loads we do:
-connection.onload = function() {
-	// Save the status of the connection in a variable
-	// this will be used to see if we have a connection (200) or not
-	var statusCode = connection.status;
+// When the xhr loads we do:
+xhr.onload = function() {
+	// Save the status of the xhr in a variable
+	// this will be used to see if we have a xhr (200) or not
+	var statusCode = xhr.status;
 	
-	// Check if we have a connection
+	// Check if we have a xhr
 	if(statusCode == 200) {
 		
-		// Save the responseText from the connection in the response variable
-		var response = connection.responseText;
+		// Save the responseText from the xhr in the response variable
+		var response = xhr.responseText;
 		
 		// Parse (build data structure) the JSON response into an object (data)
 		var data = JSON.parse(response);
@@ -174,24 +174,24 @@ connection.onload = function() {
 					uid: user.uid,
 				}
 
-				// Create a conection inside the variable connection
-				var connection = Titanium.Network.createHTTPClient();
+				// Create a conection inside the variable xhr
+				var xhr = Titanium.Network.createHTTPClient();
 				
-				connection.setRequestHeader('Content-Type','application/json; charset=utf-8');
+				xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
 				
-				// Open the connection
-				connection.open("POST",flagURL);
+				// Open the xhr
+				xhr.open("POST",flagURL);
 
-				// Send the connection
-				connection.send(flag);
+				// Send the xhr
+				xhr.send(flag);
 				
-				// When the connection loads we do:
-				connection.onload = function() {
-					// Save the status of the connection in a variable
-					// this will be used to see if we have a connection (200) or not
-					var statusCode = connection.status;
+				// When the xhr loads we do:
+				xhr.onload = function() {
+					// Save the status of the xhr in a variable
+					// this will be used to see if we have a xhr (200) or not
+					var statusCode = xhr.status;
 					
-					// Check if we have a connection
+					// Check if we have a xhr
 					if(statusCode == 200) {
 						alert("Flagged");
 					}

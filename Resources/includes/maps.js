@@ -1,8 +1,6 @@
 // Include our config file
 Ti.include('../config.js');
 
-var Drupanium;
-
 // Define the variable win to contain the current window
 var win = Ti.UI.currentWindow;
 
@@ -18,12 +16,12 @@ var mapview = Titanium.Map.createView({
 // Add our scrollview to the window
 win.add(mapview);
 
-//Define the name of the view (view as in Drupal's view)
+// Define the name of the view (view as in Drupal's view)
 var drupal_view = "maps";
 
 // Define the url which contains the full url
 // in this case, we'll connecting to http://example.com/api/rest/node/1.json
-var url = REST_PATH + 'views/maps.json';
+var url = REST_PATH + 'views/' + drupal_view + '.json';
 
 // Create a conection inside the variable connection
 var connection = Titanium.Network.createHTTPClient();
@@ -57,7 +55,7 @@ var statusCode = connection.status;
 		* and we'll use the nid to move to another window when we click
 		* on it.
 		*/
-		var results = new Array();
+		// var results = new Array();
 		var annotations = [];
 		// Start loop
 		for(var key in result) {
@@ -115,22 +113,33 @@ var statusCode = connection.status;
 				latitude: data.field_field_location[0].raw.lat,
 				longitude: data.field_field_location[0].raw.lng,
 				title: data.title,
-				subtitle: data.title,
-				pincolor:Titanium.Map.ANNOTATION_GREEN,
+				// subtitle: data.title,
+				// pincolor:Titanium.Map.ANNOTATION_GREEN,
 				animate:true,
-				rightButton: Titanium.UI.iPhone.SystemButton.DISCLOSURE,
-				myid: key, // CUSTOM ATTRIBUTE THAT IS PASSED INTO EVENT OBJECTS,
+				// rightButton: Titanium.UI.iPhone.SystemButton.DISCLOSURE,
+				// myid: key, // CUSTOM ATTRIBUTE THAT IS PASSED INTO EVENT OBJECTS,
 				// leftView: annotationView,
 			});
 			
 			annotations.push(annotation);
+			
+			
+			
+			
 		}
 	
 		// Create a new table to hold our results
 		// We tell Titanium to use our array results as the Property "data"
 		// See http://developer.appcelerator.com/apidoc/mobile/latest/Titanium.UI.TableView-object
 		// Specially the properties
-		mapview.annotations = annotations;
+		// mapview.annotations = annotations;
+		mapview.addAnnotations(annotations);
+		
+		mapview.addEventListener('click',function(evt)
+				{
+				var clickSource = evt.clicksource;
+				Ti.API.info('mapview click clicksource = ' + clickSource);
+				});
 		
 		// This var includes the latitude and longitude of the start location
 		var homeRegion = {
@@ -142,9 +151,11 @@ var statusCode = connection.status;
 		};
 		
 		// include the file where the toolbar is
-		Ti.include("../lib/map-toolbar.js");
+		// Ti.include("../lib/map-toolbar.js");
 		// call the function
-		mapToolbar(mapview, homeRegion, win);
+		// mapToolbar(mapview, homeRegion, win);
+		
+		
 	
 	}
 	else {

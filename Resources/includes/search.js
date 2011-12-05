@@ -65,41 +65,41 @@ search.addEventListener('return', function(e) {
 	// Define the url
 	// Define the url which contains the full url
 	// in this case, we'll connecting to http://example.com/api/rest/node/1.json
-	var url = SITE_PATH + 'search_node/retrieve.json?keys=' + e.value;
+	var url = REST_PATH + 'search_node/retrieve.json?keys=' + e.value;
 	
 	//First, you'll want to check the user can access the web:
 	if (Titanium.Network.online == true) {
-		// Create a conection inside the variable connection
-		var connection = Titanium.Network.createHTTPClient();
+		// Create a conection inside the variable xhr
+		var xhr = Titanium.Network.createHTTPClient();
 
-		// Open the connection
-		connection.open("GET",url);
+		// Open the xhr
+		xhr.open("GET",url);
 		
 		// Log
-		Ti.API.info("Connection open to " + url);
+		Ti.API.info("xhr open to " + url);
 		
 		// Set the header
-		connection.setRequestHeader('Content-Type','application/json; charset=utf-8');
+		xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
 		
 		// Log
-		Ti.API.info("Connection set header");
+		Ti.API.info("xhr set header");
 		
-		// Send the connection
-		connection.send();
+		// Send the xhr
+		xhr.send();
 		
 		// Log
-		Ti.API.info("Connection sent");
+		Ti.API.info("xhr sent");
 		
-		connection.onload = function requestReceived(e) {
-			var statusCode = connection.status;
+		xhr.onload = function requestReceived(e) {
+			var statusCode = xhr.status;
 			
 			// Log
 			Ti.API.info("Status code is: " + statusCode);
 			
-			// If status is 200 (connection OK) 
+			// If status is 200 (xhr OK) 
 			if (statusCode == 200) {
-				// get the responseText from the connection made
-				var response = connection.responseText;
+				// get the responseText from the xhr made
+				var response = xhr.responseText;
 				
 				// Parse the response
 				var result = JSON.parse(response);
