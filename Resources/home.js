@@ -20,12 +20,11 @@ var user = {
 
 // create table view data object
 var data = [
+    {title:'Login', hasChild:true, test:'includes/login.js'},
 	{title:'Get Node', hasChild:true, test:'includes/get-node.js'},
 	{title:'Create content', hasChild:true, test:'includes/post.js'},
-	{title:'Login', hasChild:true, test:'includes/login.js'},
 	{title:'Create account', hasChild:true, test:'includes/create-account.js'},
 	{title:'View all content', hasChild:true, test:'includes/view-all-content.js'},
-	{title:'Search', hasChild:true, test:'includes/search.js'},
 	{title:'Favorites', hasChild:true, test:'includes/favorites.js'},
 ];
 

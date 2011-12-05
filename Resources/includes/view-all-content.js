@@ -38,28 +38,28 @@ var drupal_view = "content";
 
 // Define the url which contains the full url
 // in this case, we'll connecting to http://example.com/api/rest/node/1.json
-var url = SITE_PATH + 'views/content.json';
+var url = REST_PATH + 'views/content.json';
 
-// Create a conection inside the variable connection
-var connection = Titanium.Network.createHTTPClient();
+// Create a conection inside the variable xhr
+var xhr = Titanium.Network.createHTTPClient();
 
-// Open the connection
-connection.open("GET",url);
+// Open the xhr
+xhr.open("GET",url);
 
-// Send the connection
-connection.send();
+// Send the xhr
+xhr.send();
 
-// When the connection loads we do:
-connection.onload = function() {
-	// Save the status of the connection in a variable
-	// this will be used to see if we have a connection (200) or not
-	var statusCode = connection.status;
+// When the xhr loads we do:
+xhr.onload = function() {
+	// Save the status of the xhr in a variable
+	// this will be used to see if we have a xhr (200) or not
+	var statusCode = xhr.status;
 	
-	// Check if we have a connection
+	// Check if we have a xhr
 	if(statusCode == 200) {
 		
-		// Save the responseText from the connection in the response variable
-		var response = connection.responseText;
+		// Save the responseText from the xhr in the response variable
+		var response = xhr.responseText;
 		
 		// Parse (build data structure) the JSON response into an object (data)
 		var result = JSON.parse(response);
@@ -155,7 +155,7 @@ connection.onload = function() {
 		// Create a label for the node title
 		var errorMessage = Ti.UI.createLabel({
 			// The text of the label will be the node title (data.title)
-			text: "Please check your internet connection.",
+			text: "Please check your internet xhr.",
 			color:'#000',
 			textAlign:'left',
 			font:{fontSize:24, fontWeight:'bold'},
