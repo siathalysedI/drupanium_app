@@ -1,7 +1,5 @@
 /**
- * Remember that in the debug process we can always use:
- * Ti.API.info(foo);
- * to log something to the console
+ * Get a simple node
  */
 
 // Include our config file
@@ -10,13 +8,13 @@ Ti.include('../config.js');
 // Define the variable win to contain the current window
 var win = Ti.UI.currentWindow;
 
-//Create a user variable to hold some information about the user
+// Create a user variable to hold some information about the user
 var user = {
 	uid: Titanium.App.Properties.getInt("userUid", 0),
 }
 
-// Create the scrollview to contain the view
-var scrollView = Titanium.UI.createScrollView({
+// Create the scrollview to contain the data
+var view = Titanium.UI.createScrollView({
 	contentWidth:'auto',
 	contentHeight:'auto',
 	showVerticalScrollIndicator:true,
@@ -24,25 +22,14 @@ var scrollView = Titanium.UI.createScrollView({
 	top: 0,
 });
 
-// Create a view, we'll be adding our data to this view
-var view = Ti.UI.createView({
-	backgroundColor:'#fff',
-	width:300,
-	height:2000,
-	top: 0,
-});
-
-// Add our view to the scrollview
-scrollView.add(view);
-
-// Add our scrollview to the window
-win.add(scrollView);
+// Add our view to the window
+win.add(view);
 
 // Define the url which contains the full url
 // in this case, we'll connecting to http://example.com/api/rest/node/1.json
 var url = REST_PATH + 'node/1' + '.json';
 
-// Create a conection inside the variable xhr
+// Create a connection inside the variable xhr
 var xhr = Titanium.Network.createHTTPClient();
 
 // Open the xhr
@@ -73,7 +60,9 @@ xhr.onload = function() {
 			textAlign:'left',
 			font:{fontSize:16, fontWeight:'bold'},
 			top:10,
-			height:18
+			height:18,
+			left: 10,
+			right: 10
 		});
 		
 		// Create a label for the node body
@@ -84,7 +73,9 @@ xhr.onload = function() {
 			textAlign:'left',
 			font:{fontSize:14, fontWeight:'normal'},
 			top: 30,
-			height: 1000,
+			height: "auto",
+			left: 10,
+			right: 10,
 		});
 		
 		// Add both nodeTitle and nodeBody labels to our view
@@ -102,8 +93,7 @@ xhr.onload = function() {
 		// Add the flag button to the view
 		view.add(flagButton);
 		
-
-		//Add the event listener for when the button is created
+		// Add the event listener for when the button is created
 		flagButton.addEventListener('click', function() {
 			
 			// Define the url which contains the full url

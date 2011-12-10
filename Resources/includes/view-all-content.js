@@ -10,8 +10,8 @@ Ti.include('../config.js');
 // Define the variable win to contain the current window
 var win = Ti.UI.currentWindow;
 
-// Create the scrollview to contain the view
-var scrollView = Titanium.UI.createScrollView({
+// Create the scrollview
+var view = Titanium.UI.createScrollView({
 	contentWidth:'auto',
 	contentHeight:'auto',
 	showVerticalScrollIndicator:true,
@@ -19,19 +19,8 @@ var scrollView = Titanium.UI.createScrollView({
 	top: 0,
 });
 
-// Create a view, we'll be adding our data to this view
-var view = Ti.UI.createView({
-	backgroundColor:'#fff',
-	width:300,
-	height:2000,
-	top: 0,
-});
-
-// Add our view to the scrollview
-scrollView.add(view);
-
 // Add our scrollview to the window
-win.add(scrollView);
+win.add(view);
 
 // Define the name of the view (view as in Drupal's view)
 var drupal_view = "content";
@@ -40,7 +29,7 @@ var drupal_view = "content";
 // in this case, we'll connecting to http://example.com/api/rest/node/1.json
 var url = REST_PATH + 'views/content.json';
 
-// Create a conection inside the variable xhr
+// Create a connection inside the variable xhr
 var xhr = Titanium.Network.createHTTPClient();
 
 // Open the xhr

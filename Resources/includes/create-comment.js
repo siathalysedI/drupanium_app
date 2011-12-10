@@ -1,172 +1,175 @@
 /**
- * Remember that in the debug process we can always use:
- * Ti.API.info(foo);
- * to log something to the console
+ * This file is used to create a simple comment
  */
 
-// Include our config file
-Ti.include('../config.js');
+// Include the config.js file
+Ti.include("../config.js");
 
-// Define the variable win to contain the current window
+// Include the tiajax.js library
+Ti.include("../lib/tiajax.js");
+
+// Define $ and $.ajax
+$ = {}
+$.ajax = Titanium.Network.ajax
+
+//Define the variable win to contain the current window
 var win = Ti.UI.currentWindow;
 
-//Create a user variable to hold some information about the user
+// Set the background of the window here
+win.backgroundColor = "#333";
+
+// Create a user variable to hold some information about the user
 var user = {
-	uid: Titanium.App.Properties.getInt("userUid", 0),
+	uid: Titanium.App.Properties.getInt("userUid"),
+	sessid: Titanium.App.Properties.getString("userSessionId"),
+	session_name: Titanium.App.Properties.getString("userSessionName"),
+	name: Titanium.App.Properties.getString("userName"),
 }
 
-// Create the label for the node title
-var commentTitleLabel = Titanium.UI.createLabel({
-	text:'Title',
-	font:{fontSize:14, fontWeight: "bold"},
-	left:10,
-	top:10,
-	width:300,
-	height:'auto'
+// Create a new button to have a cancel button
+var leftButton = Ti.UI.createButton({
+	title: 'Cancel',
+	style:Titanium.UI.iPhone.SystemButtonStyle.DONE
 });
 
-// Add the label to the window
-win.add(commentTitleLabel);
-
-// Create the textfield to hold the node title
-var commentTitleTextfield = Titanium.UI.createTextField({
-	height:35,
-	top:30,
-	left:10,
-	width:300,
-	font:{fontSize:16},
-	borderWidth:2,
-	borderColor:'#bbb',
-	borderRadius:5,
+// Create a new event listener for the leftButton
+leftButton.addEventListener("click", function() {
+	// Just close this window
+	win.close();
 });
 
-// Add the textfield to the window
-win.add(commentTitleTextfield);
+// We don't add the button to the window, instead, we tell the app
+// to set the button as the left navigation button
+win.setLeftNavButton(leftButton);
 
-// Create the label for the node body
-var commentBodyLabel = Titanium.UI.createLabel({
-	text:'Body',
-	font:{fontSize:14, fontWeight:"bold"},
-	left:10,
-	top:75,
-	width:300,
-	height:'auto'
-});
+if(user.sessid) {
+	// Create a new view "view" to hold the form
+	var view = Ti.UI.createView({
+		top: 0,
+	});
 
-// Add the label to the window
-win.add(commentBodyLabel);
+	// Add the view to the window
+	win.add(view);
 
-// Create the textarea to hold the body
-var commentBodyTextarea = Titanium.UI.createTextArea({
-	editable: true,
-	value:'',
-	height:150,
-	width:300,
-	top:100,
-	font:{fontSize:16,fontWeight:'normal'},
-	color:'#888',
-	textAlign:'left',
-	borderWidth:2,
-	borderColor:'#bbb',
-	borderRadius:5,
-	// True = hit return and the textarea looses focus
-	// False = hit return and the textarea enters an paragraph space
-	suppressReturn:true,
-});
+	// Create the label for the comment title
+	var commentTitleLabel = Titanium.UI.createLabel({
+		text:'Title',
+		font:{fontSize:14, fontWeight: "bold"},
+		left:10,
+		top:10,
+		width:300,
+		height:'auto',
+		color: '#fff',
+	});
 
-// Add the textarea to the window
-win.add(commentBodyTextarea);
+	// Add the label to the window
+	view.add(commentTitleLabel);
+
+	// Create the textfield to hold the comment title
+	var commentTitleTextfield = Titanium.UI.createTextField({
+		height:35,
+		top:30,
+		left:10,
+		width:300,
+		font:{fontSize:16},
+		borderWidth:2,
+		borderColor:'#bbb',
+		borderRadius:5,
+		backgroundColor: '#fff',
+	});
+
+	// Add the textfield to the window
+	view.add(commentTitleTextfield);
 
 
-// Add the save button
-var saveButton = Titanium.UI.createButton({
-	title:'Save',
-	height:40,
-	width:200,
-	top:270
-});
+	// Create the label for the comment body
+	var commentBodyLabel = Titanium.UI.createLabel({
+		text:'Body',
+		font:{fontSize:14, fontWeight:"bold"},
+		left:10,
+		top:75,
+		width:300,
+		height:'auto',
+		color: '#fff',
+	});
 
-// Add the button to the window
-win.add(saveButton);
+	// Add the label to the window
+	view.add(commentBodyLabel);
 
-// Add the event listener for when the button is created
-saveButton.addEventListener('click', function() {
-	
-	var comment = {
-		title: commentTitleTextfield.value,
-		body: {
-			und: {
-				0: {
-					value: commentBodyTextarea.value,
-				}
-			}
-		},
-	}
-	
-	alert(comment);
-	
-	// Define the url which contains the full url
-	// in this case, we'll connecting to http://example.com/api/rest/node/1.json
-	var url = SITE_PATH + 'node/';
+	// Create the textarea to hold the body
+	var commentBodyTextarea = Titanium.UI.createTextArea({
+		editable: true,
+		value:'',
+		height:150,
+		width:300,
+		top:100,
+		font:{fontSize:16,fontWeight:'normal'},
+		color:'#888',
+		textAlign:'left',
+		borderWidth:2,
+		borderColor:'#bbb',
+		borderRadius:5,
+		// True = hit return and the textarea looses focus
+		// False = hit return and the textarea enters an paragraph space
+		suppressReturn:true,
+	});
 
-	// Create a conection inside the variable connection
-	var connection = Titanium.Network.createHTTPClient();
+	// Add the textarea to the window
+	view.add(commentBodyTextarea);
 
-	// Open the connection
-	connection.open("POST",url);
 
-	// Send the connection
-	connection.send(node);
+	// Add the save button
+	var saveButton = Titanium.UI.createButton({
+		title:'Save',
+		height:40,
+		width:200,
+		top:270
+	});
 
-	// When the connection loads we do:
-	connection.onload = function() {
-		// Save the status of the connection in a variable
-		// this will be used to see if we have a connection (200) or not
-		var statusCode = connection.status;
+	// Add the button to the window
+	view.add(saveButton);
+
+	// Add the event listener for when the button is created
+	saveButton.addEventListener("click", function() {
 		
-		// Check if we have a connection
-		if(statusCode == 200) {
-			// Save the responseText from the connection in the response variable		
-			var response = connection.responseText;
-			
-			// Parse (build data structure) the JSON response into an object (data)
-			var data = JSON.parse(response);
-			
-			// the reponse contains the nid and the uri
-			//alert(data);
-			
-			alert("Content created with nid: " + data.nid);
-			
-			// Redirect to the new content
-			// Define a new Window "nodeWindow"
-            var nodeWindow = Titanium.UI.createWindow({
-            	// the window is not here, but in the file get-node-by-nid.js
-            	// so we load it
-            	url:'get-node-by-nid.js',
-            	
-            	// define some basic properties
-            	backgroundColor:'#fff',
-            	
-            	// Define the title of our new window using the node title
-            	// e.rowData contains the information we defined when we passed it
-            	// to Titanium.UI.createTableView using the property "data"
-            	// so e.rowData.title = data.title for each of the rows in the table
-            	
-            	
-            	// The same for the nid
-            	// We send the nid as an property in this window and the 
-            	// get-node-by-nid file will recognize it and use it
-            	nid:data.nid,
-            	
-            	// a boolean indicating if the view should receive touch events (true, default) or forward them to peers (false)
-            	touchEnabled: true
-            });
-            
-            // order the app to open the nodeWindow window in the current Tab
-            Titanium.UI.currentTab.open(nodeWindow,{animated:true});
-            
-		}
-	}
-
-});
-
+		// Create a new comment object
+		var comment = {
+		  comment:{
+			subject: commentTitleTextfield.value,
+			comment_body: {
+			  und: [
+			    { value: commentBodyTextarea.value, 
+			    }
+			  ]
+			},
+			uid: user.uid,
+			// We need to pass the nid to the object and win.nid has the nid
+			nid: win.nid
+		  }
+		};
+		
+		// Define the url 
+		// in this case, we'll connecting to http://example.com/api/rest/comment
+		var url = REST_PATH + 'comment';
+		
+		// Use $.ajax to create the comment
+		$.ajax({
+	        type: "POST",
+	        url: url,
+	        data: JSON.stringify(comment), // Stringyfy the comment
+	        dataType: 'json',
+	        contentType: 'application/json',
+	        // On success do some processing like closing the window and show an alert
+	        success: function(data) {
+	        	win.close();
+	            alert("Posted comment");
+	        },
+	        error: function(err) {
+	        	
+	        }
+	    });
+	});
+}
+else {
+	alert("You need to login first");
+}

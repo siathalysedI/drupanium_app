@@ -1,17 +1,11 @@
-/**
- * Remember that in the debug process we can always use:
- * Ti.API.info(foo);
- * to log something to the console
- */
-
 // Include our config file
 Ti.include('../config.js');
 
 // Define the variable win to contain the current window
 var win = Ti.UI.currentWindow;
 
-// Create the scrollview to contain the view
-var scrollView = Titanium.UI.createScrollView({
+// Create the view
+var view = Titanium.UI.createScrollView({
 	contentWidth:'auto',
 	contentHeight:'auto',
 	showVerticalScrollIndicator:true,
@@ -19,19 +13,8 @@ var scrollView = Titanium.UI.createScrollView({
 	top: 43,
 });
 
-// Create a view, we'll be adding our data to this view
-var view = Ti.UI.createView({
-	backgroundColor:'#fff',
-	width:300,
-	height:2000,
-	top: 0,
-});
-
-// Add our view to the scrollview
-scrollView.add(view);
-
-// Add our scrollview to the window
-win.add(scrollView);
+// Add our view to the window
+win.add(view);
 
 // Create the search bar
 var search = Titanium.UI.createSearchBar({
@@ -51,61 +34,62 @@ win.add(search);
 // Add the different event listeners for the search bar
 search.addEventListener('cancel', function() {
   search.blur();
-  win.remove(scrollView);
+  win.remove(view);
 });
 
 search.addEventListener('click', function() {
 	search.focus();
-	win.remove(scrollView);
+	win.remove(view);
 });
 
-//If change causes trouble change to return
+// If change causes trouble change to return
 search.addEventListener('return', function(e) {
 	
 	// Define the url
-	// Define the url which contains the full url
-	// in this case, we'll connecting to http://example.com/api/rest/node/1.json
+	// in this case, we'll connecting to http://example.com/api/rest/search_node/retrieve.json?keys=value
 	var url = REST_PATH + 'search_node/retrieve.json?keys=' + e.value;
 	
-	//First, you'll want to check the user can access the web:
+	// We want to check if the user can access the web:
 	if (Titanium.Network.online == true) {
-		// Create a conection inside the variable xhr
+		// Create a connection inside the variable xhr
 		var xhr = Titanium.Network.createHTTPClient();
 
-		// Open the xhr
+		// Open the connection and send the url using GET
 		xhr.open("GET",url);
 		
 		// Log
-		Ti.API.info("xhr open to " + url);
+		// Ti.API.info("xhr open to " + url);
 		
 		// Set the header
 		xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
 		
 		// Log
-		Ti.API.info("xhr set header");
+		// Ti.API.info("xhr set header");
 		
-		// Send the xhr
+		// Send the connection
 		xhr.send();
 		
 		// Log
-		Ti.API.info("xhr sent");
+		// Ti.API.info("xhr sent");
 		
+		// On load do:
 		xhr.onload = function requestReceived(e) {
+			// Save the connection status in variable statusCode
 			var statusCode = xhr.status;
 			
 			// Log
-			Ti.API.info("Status code is: " + statusCode);
+			// Ti.API.info("Status code is: " + statusCode);
 			
 			// If status is 200 (xhr OK) 
 			if (statusCode == 200) {
-				// get the responseText from the xhr made
+				// get the responseText from the connection
 				var response = xhr.responseText;
 				
 				// Parse the response
 				var result = JSON.parse(response);
 				
 				// Log
-				Ti.API.info("Response is " + result);
+				// Ti.API.info("Response is " + result);
 	     
 				// Hide the keyboard
 				search.blur();
@@ -158,6 +142,8 @@ search.addEventListener('return', function(e) {
 					 * it consists of title, nid and the property hasChild 
 					 * in title we get the node title with data.title
 					 * in nid we save the node nid with data.node.nid (we walk the array)
+					 * hasChild is very important becase we tell Titanium that we can
+					 * click on the row and a new window will open
 					 */
 					results[key] = {title: data.title, hasChild:true, nid:data.node.nid};
 				}

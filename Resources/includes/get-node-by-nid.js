@@ -1,10 +1,4 @@
 /**
- * Remember that in the debug process we can always use:
- * Ti.API.info(foo);
- * to log something to the console
- */
-
-/**
  * this file is almost the same as the get-node with
  * one big difference, the nid is taken as an argument 
  * and is passed by other files and this file
@@ -23,8 +17,8 @@ var user = {
 	uid: Titanium.App.Properties.getInt("userUid", 0),
 }
 
-// Create the scrollview to contain the view
-var scrollView = Titanium.UI.createScrollView({
+// Create the scrollview
+var view = Titanium.UI.createScrollView({
 	contentWidth:'auto',
 	contentHeight:'auto',
 	showVerticalScrollIndicator:true,
@@ -32,26 +26,15 @@ var scrollView = Titanium.UI.createScrollView({
 	top: 0,
 });
 
-// Create a view, we'll be adding our data to this view
-var view = Ti.UI.createView({
-	backgroundColor:'#fff',
-	width:300,
-	height:2000,
-	top: 0,
-});
-
-// Add our view to the scrollview
-scrollView.add(view);
-
 // Add our scrollview to the window
-win.add(scrollView);
+win.add(view);
 
 // Define the url which contains the full url
 // See how we build the url using the win.nid which is 
 // the nid property we pass to this file when we create the window
 var url = REST_PATH + 'node/' + win.nid + '.json';
 
-// Create a conection inside the variable xhr
+// Create a connection inside the variable xhr
 var xhr = Titanium.Network.createHTTPClient();
 
 // Open the xhr
@@ -86,7 +69,9 @@ xhr.onload = function() {
 			textAlign:'left',
 			font:{fontSize:16, fontWeight:'bold'},
 			top:10,
-			height:18
+			height:18,
+			left: 10,
+			right: 10
 		});
 		
 		// Create a label for the node body
@@ -96,13 +81,19 @@ xhr.onload = function() {
 			color:'#000',
 			textAlign:'left',
 			font:{fontSize:14, fontWeight:'normal'},
+			height: "auto",
 			top: 30,
-			height: 1000,
+			left: 10,
+			right: 10,
 		});
 		
 		// Add both nodeTitle and nodeBody labels to our view
 		view.add(nodeTitle);
 		view.add(nodeBody);
+		
+		// Check if this node is already flagged
+		var flag_name = "bookmarks";
+		var isFlaggedUrl = REST_PATH + "is_flagged/" + flag_name + "/" + win.nid + '/' + user.uid + '.json';
 		
 		// Add the buttons bar 
 		var buttonsBar = Titanium.UI.createButtonBar({
@@ -145,14 +136,15 @@ xhr.onload = function() {
 			
 			// Clicked on the add comment button
 			else if(e.index == 1) {
-				// Not working
 				var addCommentWin = Titanium.UI.createWindow({
 					title: 'Add comment',
-					backgroundColor: '#fff',
+					backgroundColor: '#666',
 					url: 'create-comment.js',
 					nid: data.nid,
 					touchEnabled: true,
 					animated: true,
+					modal: false,
+					navBarHidden: false,
 				});
 				
 				// Order Titanium to open the window in the same tabe

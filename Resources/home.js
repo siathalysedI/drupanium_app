@@ -82,9 +82,6 @@ if(user.sessid) {
 			// do not hide the navigation bar
 			navBarHidden: false,
 			
-			// background color for the new window
-			backgroundColor: "#006099",
-			
 			// close the window on close
 			exitOnClose: true,
 		});

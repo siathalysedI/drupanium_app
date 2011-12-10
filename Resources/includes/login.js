@@ -1,16 +1,22 @@
-/**
- * Remember that in the debug process we can always use:
- * Ti.API.info(foo);
- * to log something to the console
- */
-
 // Include our config file
 Ti.include('../config.js');
 
 // Define the variable win to contain the current window
 var win = Ti.UI.currentWindow;
 
-// Create the label for the node title
+// Create a new scroll view
+var view = Ti.UI.createScrollView({
+	contentWidth:'auto',
+	contentHeight:'auto',
+	showVerticalScrollIndicator:true,
+	showHorizontalScrollIndicator:true,
+	top: 0,
+});
+
+// Add the view to the window
+win.add(view);
+
+// Create the labelfor the username
 var usernameLabel = Titanium.UI.createLabel({
 	text:'Username',
 	font:{fontSize:14, fontWeight: "bold"},
@@ -20,10 +26,10 @@ var usernameLabel = Titanium.UI.createLabel({
 	height:'auto'
 });
 
-// Add the label to the window
-win.add(usernameLabel);
+// Add the label to the view
+view.add(usernameLabel);
 
-// Create the textfield to hold the node title
+// Create the username textfield
 var usernameTextfield = Titanium.UI.createTextField({
 	height:35,
 	top:30,
@@ -36,10 +42,10 @@ var usernameTextfield = Titanium.UI.createTextField({
 	autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
 });
 
-// Add the textfield to the window
-win.add(usernameTextfield);
+// Add the textfield to the view
+view.add(usernameTextfield);
 
-//Create the label for the node title
+// Create the label for the password
 var passwordLabel = Titanium.UI.createLabel({
 	text:'Password',
 	font:{fontSize:14, fontWeight: "bold"},
@@ -49,10 +55,10 @@ var passwordLabel = Titanium.UI.createLabel({
 	height:'auto'
 });
 
-// Add the label to the window
-win.add(passwordLabel);
+// Add the label to the view
+view.add(passwordLabel);
 
-//Create the textfield to hold the node title
+// Create the password textfield
 var passwordTextfield = Titanium.UI.createTextField({
 	height:35,
 	top:100,
@@ -62,14 +68,16 @@ var passwordTextfield = Titanium.UI.createTextField({
 	borderWidth:2,
 	borderColor:'#bbb',
 	borderRadius:5,
+	// This is very important. Don't auto capitalize the first letter of the password
 	autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
+	// Mask the password so nobody sees it
 	passwordMask:true,
 });
 
-// Add the textarea to the window
-win.add(passwordTextfield);
+// Add the textarea to the view
+view.add(passwordTextfield);
 
-// Add the login button
+// Create the login button
 var loginButton = Titanium.UI.createButton({
 	title:'Login',
 	height:40,
@@ -77,47 +85,49 @@ var loginButton = Titanium.UI.createButton({
 	top:170
 });
 
-// Add the button to the window
-win.add(loginButton);
+// Add the button to the view
+view.add(loginButton);
 
-//Add the event listener for when the button is created
+// Add the event listener for when the button is created
 loginButton.addEventListener('click', function() {
 	
+	// alert("Clicked button loginButton");
+	
+	// Create an object to hold the data entered in the form
 	var user = {
 		username: usernameTextfield.value,
 		password: passwordTextfield.value,
 	}
 	
 	// Define the url which contains the full url
-	// in this case, we'll connecting to http://example.com/api/rest/node/1.json
+	// in this case, we'll connecting to http://example.com/api/rest/user/login
 	var url = REST_PATH + 'user/login';
-
-	// Create a conection inside the variable connection
+	
+	// Create a connection
 	var xhr = Titanium.Network.createHTTPClient();
 	
 	xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
 	
-	// Open the connection
+	// Open the connection using POST
 	xhr.open("POST",url);
 
-	// Send the connection
+	// Send the connection and the user object as argument
 	xhr.send(user);
 	
 	// When the connection loads we do:
 	xhr.onload = function() {
 		// Save the status of the connection in a variable
 		// this will be used to see if we have a connection (200) or not
-		var statusCode = connection.status;
-		// Check if we have a connection
+		var statusCode = xhr.status;
+		
+		// Check if we have a valid status
 		if(statusCode == 200) {
 			
+			// Create a variable response to hold the response
 			var response = xhr.responseText;
 			
 			// Parse (build data structure) the JSON response into an object (data)
 			var data = JSON.parse(response);
-			
-			// alert(data);
-			alert("Login successful with uid " + data.user.uid);
 			
 			// Set a global variable
 			Titanium.App.Properties.setInt("userUid", data.user.uid);
@@ -134,18 +144,18 @@ loginButton.addEventListener('click', function() {
 			
 			xhr2.onload = function() {
 				var userStatusCode = xhr2.status;
-				
-				alert(userStatusCode);
-				
+								
 				if(userStatusCode == 200) {
 					var userResponse = xhr2.responseText;
 					var user = JSON.parse(userResponse);
 					
-					// alert(user);
-					
 					alert("Welcome " + user.name);
 					
+					// Set the user.userName to the logged in user name
 					Titanium.App.Properties.setString("userName", user.name);
+					
+					// Close the window
+					win.close();
 				}
 			}
 		}
@@ -155,7 +165,7 @@ loginButton.addEventListener('click', function() {
 	}
 });
 
-//Add the logout button
+// Add the logout button
 var logoutButton = Titanium.UI.createButton({
 	title:'Logout',
 	height:40,
@@ -166,35 +176,41 @@ var logoutButton = Titanium.UI.createButton({
 // Add the button to the window
 win.add(logoutButton);
 
-//Add the event listener for when the button is created
+// Add the event listener for when the button is created
 logoutButton.addEventListener('click', function() {
 	
 	// Define the url which contains the full url
-	// in this case, we'll connecting to http://example.com/api/rest/node/1.json
-	var url = REST_PATH + 'user/logout';
+	// in this case, we'll connecting to http://example.com/api/rest/user/logout
+	var logoutUrl = REST_PATH + 'user/logout';
 
-	// Create a conection inside the variable connection
-	var xhr = Titanium.Network.createHTTPClient();
+	// Create a connection
+	var xhr3 = Titanium.Network.createHTTPClient();
 	
-	xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
+	xhr3.setRequestHeader('Content-Type','application/json; charset=utf-8');
 	
 	// Open the connection
-	xhr.open("POST",url);
+	xhr3.open("POST",logoutUrl);
 
 	// Send the connection
-	xhr.send();
+	xhr3.send();
 	
 	// When the connection loads we do:
-	xhr.onload = function() {
+	xhr3.onload = function() {
 		// Save the status of the connection in a variable
 		// this will be used to see if we have a connection (200) or not
-		var statusCode = xhr.status;
+		var statusCodeLogout = xhr3.status;
 		// Check if we have a connection
-		if(statusCode == 200) {
-			alert("Session terminated");
+		if(statusCodeLogout == 200) {
+			var user = {
+				uid: Titanium.App.Properties.removeProperty("userUid"),
+				sessid: Titanium.App.Properties.removeProperty("userSessionId"),
+				session_name: Titanium.App.Properties.removeProperty("userSessionName"),
+				name: Titanium.App.Properties.removeProperty("userName"),
+			}
+			alert("Goodbye");
 		}
 		else {
-			alert("There was an error");
+			alert("You're not currently logged in");
 		}
 	}
 });

@@ -1,9 +1,3 @@
-/**
- * Remember that in the debug process we can always use:
- * Ti.API.info(foo);
- * to log something to the console
- */
-
 // Include our config file
 Ti.include('../config.js');
 
@@ -12,13 +6,14 @@ var win = Ti.UI.currentWindow;
 
 // Create a user variable to hold some information about the user
 var user = {
-	uid: Titanium.App.Properties.getInt("userUid", 0),
+	uid: Titanium.App.Properties.getInt("userUid"),
+	sessid: Titanium.App.Properties.getString("userSessionId"),
+	session_name: Titanium.App.Properties.getString("userSessionName"),
+	name: Titanium.App.Properties.getString("userName"),
 }
 
-// alert(user.uid);
-
-// Create the scrollview to contain the view
-var scrollView = Titanium.UI.createScrollView({
+// Create the scrollview
+var view = Titanium.UI.createScrollView({
 	contentWidth:'auto',
 	contentHeight:'auto',
 	showVerticalScrollIndicator:true,
@@ -26,47 +21,36 @@ var scrollView = Titanium.UI.createScrollView({
 	top: 0,
 });
 
-// Create a view, we'll be adding our data to this view
-var view = Ti.UI.createView({
-	backgroundColor:'#fff',
-	width:300,
-	height:2000,
-	top: 0,
-});
-
-// Add our view to the scrollview
-scrollView.add(view);
-
 // Add our scrollview to the window
-win.add(scrollView);
+win.add(view);
 
 // Define the name of the view (view as in Drupal's view)
-var drupal_view = "content";
+var drupal_view = "flag_bookmarks_tab";
 
 // Define the url which contains the full url
-// in this case, we'll connecting to http://example.com/api/rest/node/1.json
-var url = SITE_PATH + 'views/flag_bookmarks_tab.json?args='+ user.uid;
+// in this case, we'll connecting to http://example.com/api/rest/views/flag_bookmarks_tab.json?args=USERID
+var url = REST_PATH + 'views/' + drupal_view +'.json?args='+ user.uid;
 
 // Create a conection inside the variable connection
-var connection = Titanium.Network.createHTTPClient();
+var xhr = Titanium.Network.createHTTPClient();
 
 // Open the connection
-connection.open("GET",url);
+xhr.open("GET",url);
 
 // Send the connection
-connection.send();
+xhr.send();
 
 // When the connection loads we do:
-connection.onload = function() {
+xhr.onload = function() {
 	// Save the status of the connection in a variable
 	// this will be used to see if we have a connection (200) or not
-	var statusCode = connection.status;
+	var statusCode = xhr.status;
 	
 	// Check if we have a connection
 	if(statusCode == 200) {
 		
 		// Save the responseText from the connection in the response variable
-		var response = connection.responseText;
+		var response = xhr.responseText;
 		
 		// Parse (build data structure) the JSON response into an object (data)
 		var result = JSON.parse(response);
