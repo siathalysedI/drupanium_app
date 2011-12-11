@@ -116,14 +116,48 @@ if(user.sessid) {
 
 	// Add the textarea to the window
 	view.add(nodeBodyTextarea);
+	
+	/*
+	var imageButton = Ti.UI.createButton({
+		title: "Image",
+		height: 20,
+		width: 100,
+		font: {
+			fontSize: 13,
+		},
+		top: 290
+	});
 
+	view.add(imageButton);
+	
+	var data_to_send = {};
+	
+	imageButton.addEventListener('click', function() {
+		Ti.Media.showCamera({
+	        showControls:true,  
+	        mediaTypes:Ti.Media.MEDIA_TYPE_PHOTO,
+	        autohide:true, 
+	        allowEditing:true,
+	        success:function(event) {
+	            var image = event.media;
+	            var f = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory,'camera_photo.png');
+		            f.write(image);
+		        imageView.image = f.nativePath;
+		        data_to_send.file = f.read();
+		        data_to_send.name = 'camera_photo.png';
+	        },
+	        cancel:function() { },
+	        error:function(error) {}
+	    });
+	});
+	*/
 
 	// Add the save button
 	var saveButton = Titanium.UI.createButton({
 		title:'Save',
 		height:40,
 		width:200,
-		top:270
+		top:320
 	});
 
 	// Add the button to the window
@@ -144,6 +178,15 @@ if(user.sessid) {
 			    }
 			  ]
 			},
+			/*
+			field_image: {
+				  und: [
+				    { filename: data_to_send.file, 
+				      filemime: 'image/png'
+				    }
+				  ]
+				},
+			 */
 			uid: user.uid,
 		  }
 		};

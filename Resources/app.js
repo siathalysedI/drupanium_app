@@ -30,7 +30,7 @@ var homeWin = Titanium.UI.createWindow({
 // Create the home tab
 var homeTab = Titanium.UI.createTab({  
 	// Set the icon for the button
-    icon:'KS_nav_views.png',
+    icon:'icons/53-house.png',
     
     // Set the title for the tab
     title:'Home',
@@ -48,7 +48,7 @@ var userWin = Ti.UI.createWindow({
 
 // Create the user tab
 var userTab = Ti.UI.createTab({
-	icon: "KS_nav_views.png",
+	icon: "icons/111-user.png",
 	window: userWin
 });
 
@@ -69,7 +69,7 @@ var searchWin = Ti.UI.createWindow({
 // Create the search tab
 var searchTab = Ti.UI.createTab({
 	title: 'Search',
-	icon: "KS_nav_views.png",
+	icon: "icons/06-magnify.png",
 	window: searchWin,
 });
 
@@ -83,7 +83,7 @@ var mapsWin = Ti.UI.createWindow({
 // Create the tab window
 var mapsTab = Ti.UI.createTab({
 	title: "Maps",
-	icon: "KS_nav_views.png",
+	icon: "icons/07-map-marker.png",
 	window: mapsWin,
 });
 

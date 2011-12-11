@@ -97,7 +97,7 @@ xhr.onload = function() {
 		flagButton.addEventListener('click', function() {
 			
 			// Define the url which contains the full url
-			// in this case, we'll connecting to http://example.com/api/rest/node/1.json
+			// in this case, we'll connecting to http://example.com/api/rest/flag/flag.json
 			var url = SITE_PATH + 'flag/flag.json';
 			
 			var flag = {

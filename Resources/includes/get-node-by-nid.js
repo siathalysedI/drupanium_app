@@ -91,16 +91,51 @@ xhr.onload = function() {
 		view.add(nodeTitle);
 		view.add(nodeBody);
 		
-		// Check if this node is already flagged
-		var flag_name = "bookmarks";
-		var isFlaggedUrl = REST_PATH + "is_flagged/" + flag_name + "/" + win.nid + '/' + user.uid + '.json';
-		
 		// Add the buttons bar 
 		var buttonsBar = Titanium.UI.createButtonBar({
 			// data.comment_count has the number of comments the node has
-			labels:['Comments (' + data.comment_count + ')', 'Add comment', 'Bookmark this'],
-			backgroundColor:'blue'
+			backgroundColor:'blue',
+			labels: ['Comments (' + data.comment_count + ')', "Add comment", "Bookmark"],
 		});
+		
+		var nodeFlagStatus = "";
+		
+		// Check if this node is flagged or not
+		var checkFlag = {
+			flag_name: "bookmarks",
+			content_id: win.nid,
+			uid: user.uid,
+		}
+		
+		var isFlaggedURL = REST_PATH + 'flag/is_flagged.json';
+
+		// Create a connection to check if this node is flagged
+		var isFlagged = Titanium.Network.createHTTPClient();
+			
+		isFlagged.setRequestHeader('Content-Type','application/json; charset=utf-8');
+			
+		// Open
+		isFlagged.open("POST",isFlaggedURL);
+
+		// Send the xhr
+		isFlagged.send(checkFlag);
+		
+		isFlagged.onload = function() {
+			var status = isFlagged.status;
+			if(status == 200) {
+				// Save the response
+				var isFlaggedResponse = isFlagged.responseText;
+				
+				var isFlaggedResult = JSON.parse(isFlaggedResponse);
+				
+				if(isFlaggedResult == 1) {
+					nodeFlagStatus = "flagged";
+				}
+				else {
+					nodeFlagStatus = "unflagged";
+				}
+			}
+		}	
 		
 		// Add a flexible space so the buttons are centered
 		var flexSpace = Titanium.UI.createButton({
@@ -108,7 +143,7 @@ xhr.onload = function() {
 		}); 
 		
 		// Add the toolbar to the window, note that we add the flexible space,
-		// then the buttonsBar and then agin another flexible space
+		// then the buttonsBar and then again another flexible space
 		win.setToolbar([flexSpace,buttonsBar,flexSpace]);
 
 		// Add an event listerner for clicks on the buttons bar
@@ -157,15 +192,21 @@ xhr.onload = function() {
 				
 				// Define the url which contains the full url
 				// in this case, we'll connecting to http://example.com/api/rest/node/1.json
-				var flagURL = SITE_PATH + 'flag/flag.json';
+				var flagURL = REST_PATH + 'flag/flag.json';
 				
 				var flag = {
 					flag_name: "bookmarks",
 					content_id: win.nid,
-					action: "flag",
 					uid: user.uid,
 				}
-
+				
+				if(nodeFlagStatus == "flagged") {
+					flag.action = "unflag";
+				}
+				else {
+					flag.action = "flag";
+				}
+				
 				// Create a conection inside the variable xhr
 				var xhr = Titanium.Network.createHTTPClient();
 				
@@ -185,7 +226,12 @@ xhr.onload = function() {
 					
 					// Check if we have a xhr
 					if(statusCode == 200) {
-						alert("Flagged");
+						if(nodeFlagStatus == "flagged") {
+							alert("Unbookmarked");
+						}
+						else {
+							alert("Bookmarked");
+						}
 					}
 					else {
 						alert("I'm sorry, there was an error " + statusCode);
