@@ -199,7 +199,7 @@ if(user.sessid) {
 		$.ajax({
 	        type: "POST",
 	        url: url,
-	        data: JSON.stringify(node), // Stringyfy the node
+	        data: JSON.stringify(node), // Stringify the node
 	        dataType: 'json',
 	        contentType: 'application/json',
 	        // On success do some processing like closing the window and show an alert

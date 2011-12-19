@@ -156,7 +156,7 @@ if(user.sessid) {
 		$.ajax({
 	        type: "POST",
 	        url: url,
-	        data: JSON.stringify(comment), // Stringyfy the comment
+	        data: JSON.stringify(comment), // Stringify the comment
 	        dataType: 'json',
 	        contentType: 'application/json',
 	        // On success do some processing like closing the window and show an alert
