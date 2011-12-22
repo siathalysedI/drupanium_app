@@ -10,14 +10,6 @@
 // Create a new variable to hold the current window
 var win = Titanium.UI.currentWindow;
 
-// Create a user variable to hold some information about the user
-var user = {
-	uid: Titanium.App.Properties.getInt("userUid"),
-	sessid: Titanium.App.Properties.getString("userSessionId"),
-	session_name: Titanium.App.Properties.getString("userSessionName"),
-	name: Titanium.App.Properties.getString("userName"),
-}
-
 // create table view data object
 var data = [
     {title:'Login', hasChild:true, test:'includes/login.js'},
@@ -56,8 +48,24 @@ win.add(tableview);
  * CREATE THE POST BUTTON
  *************************************
  */
+if(Titanium.App.Properties.getInt("userUid")) {
 
-if(user.sessid) {
+	// Create a user variable to hold some information about the user
+	var user = {
+		uid: Titanium.App.Properties.getInt("userUid"),
+		name: Titanium.App.Properties.getString("userName"),
+	}
+	
+	// For users who created an account, they will be logged in but there will be no session id
+	// or session_name 
+	if(Titanium.App.Properties.getString("userSessionId")) {
+		user.sessid = Titanium.App.Properties.getString("userSessionId");
+	}
+	
+	if(Titanium.App.Properties.getString("userSessionName")) {
+		user.session_name = Titanium.App.Properties.getString("userSessionName");
+	}
+	
 	alert("Welcome " + user.name);
 	
 	// Create a new button

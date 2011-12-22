@@ -1,172 +1,206 @@
-/**
- * Remember that in the debug process we can always use:
- * Ti.API.info(foo);
- * to log something to the console
- */
-
-// Include our config file
 Ti.include('../config.js');
+
+// Include the tiajax.js library
+Ti.include("../lib/tiajax.js");
+
+//Define $ and $.ajax
+$ = {}
+$.ajax = Titanium.Network.ajax
 
 // Define the variable win to contain the current window
 var win = Ti.UI.currentWindow;
 
-// Create the label for the node title
-var usernameLabel = Titanium.UI.createLabel({
-	text:'Username',
-	font:{fontSize:14, fontWeight: "bold"},
-	left:10,
-	top:10,
-	width:300,
-	height:'auto'
-});
+// Check if the user is logged in. Drupal doesn't accept new accounts
+// if the user is logged in then show an alert with a message
+if(Titanium.App.Properties.getInt("userUid")) {
+	alert("You're logged in, please logout first");
+}
+else {
+	// Create the scrollview to contain the data
+	var view = Titanium.UI.createScrollView({
+		contentWidth:'auto',
+		contentHeight:'auto',
+		showVerticalScrollIndicator:true,
+		showHorizontalScrollIndicator:true,
+		top: 0,
+	});
 
-// Add the label to the window
-win.add(usernameLabel);
+	// Add the view to the window
+	win.add(view);
 
-// Create the textfield to hold the node title
-var usernameTextfield = Titanium.UI.createTextField({
-	height:35,
-	top:30,
-	left:10,
-	width:300,
-	font:{fontSize:16},
-	borderWidth:2,
-	borderColor:'#bbb',
-	borderRadius:5,
-	autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
-});
+	// Create the label for the username
+	var usernameLabel = Titanium.UI.createLabel({
+		text:'Username',
+		font:{fontSize:14, fontWeight: "bold"},
+		left:10,
+		top:10,
+		width:300,
+		height:'auto'
+	});
 
-// Add the textfield to the window
-win.add(usernameTextfield);
+	// Add the label to the window
+	view.add(usernameLabel);
 
-//Create the label for the node title
-var emailLabel = Titanium.UI.createLabel({
-	text:'Email',
-	font:{fontSize:14, fontWeight: "bold"},
-	left:10,
-	top:75,
-	width:300,
-	height:'auto'
-});
+	// Create the textfield for the username
+	var usernameTextfield = Titanium.UI.createTextField({
+		height:35,
+		top:30,
+		left:10,
+		width:300,
+		font:{fontSize:16},
+		borderWidth:2,
+		borderColor:'#bbb',
+		borderRadius:5,
+		autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
+	});
 
-// Add the label to the window
-win.add(emailLabel);
+	// Add the textfield to the window
+	view.add(usernameTextfield);
 
-//Create the textfield to hold the node title
-var emailTextfield = Titanium.UI.createTextField({
-	height:35,
-	top:100,
-	left:10,
-	width:300,
-	font:{fontSize:16},
-	borderWidth:2,
-	borderColor:'#bbb',
-	borderRadius:5,
-	autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
-});
+	// Create the label for the email
+	var emailLabel = Titanium.UI.createLabel({
+		text:'Email',
+		font:{fontSize:14, fontWeight: "bold"},
+		left:10,
+		top:70,
+		width:300,
+		height:'auto'
+	});
 
-// Add the textarea to the window
-win.add(emailTextfield);
+	// Add the label to the window
+	view.add(emailLabel);
 
-//Create the label for the node title
-var passwordLabel = Titanium.UI.createLabel({
-	text:'Password',
-	font:{fontSize:14, fontWeight: "bold"},
-	left:10,
-	top:150,
-	width:300,
-	height:'auto'
-});
+	// Create the textfield for the email
+	var emailTextfield = Titanium.UI.createTextField({
+		height:35,
+		top:90,
+		left:10,
+		width:300,
+		font:{fontSize:16},
+		borderWidth:2,
+		borderColor:'#bbb',
+		borderRadius:5,
+		autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
+	});
 
-// Add the label to the window
-win.add(passwordLabel);
+	// Add the textarea to the window
+	view.add(emailTextfield);
 
-//Create the textfield to hold the node title
-var passwordTextfield = Titanium.UI.createTextField({
-	height:35,
-	top:170,
-	left:10,
-	width:300,
-	font:{fontSize:16},
-	borderWidth:2,
-	borderColor:'#bbb',
-	borderRadius:5,
-	autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
-	passwordMask:true,
-});
+	// Create the label for the password
+	var passwordLabel = Titanium.UI.createLabel({
+		text:'Password',
+		font:{fontSize:14, fontWeight: "bold"},
+		left:10,
+		top:130,
+		width:300,
+		height:'auto'
+	});
 
-// Add the textarea to the window
-win.add(passwordTextfield);
+	// Add the label to the window
+	view.add(passwordLabel);
 
-// Add the login button
-var createAccountButton = Titanium.UI.createButton({
-	title:'Create account',
-	height:40,
-	width:200,
-	top:220
-});
+	// Create the textfield for the password
+	var passwordTextfield = Titanium.UI.createTextField({
+		height:35,
+		top:150,
+		left:10,
+		width:300,
+		font:{fontSize:16},
+		borderWidth:2,
+		borderColor:'#bbb',
+		borderRadius:5,
+		autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
+		passwordMask:true,
+	});
 
-// Add the button to the window
-win.add(createAccountButton);
+	// Add the textarea to the window
+	view.add(passwordTextfield);
 
-createAccountButton.addEventListener('click', function() {
+	// Create the label for the full name
+	var nameLabel = Titanium.UI.createLabel({
+		text:'Full Name',
+		font:{fontSize:14, fontWeight: "bold"},
+		left:10,
+		top:190,
+		width:300,
+		height:'auto'
+	});
+
+	// Add the label to the window
+	view.add(nameLabel);
+
+	//Create the textfield for the full name
+	var nameTextfield = Titanium.UI.createTextField({
+		height:35,
+		top:210,
+		left:10,
+		width:300,
+		font:{fontSize:16},
+		borderWidth:2,
+		borderColor:'#bbb',
+		borderRadius:5,
+		autocapitalization:Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE,
+	});
+
+	// Add the textarea to the window
+	view.add(nameTextfield);
+
+	// Add the login button
+	var createAccountButton = Titanium.UI.createButton({
+		title:'Create account',
+		height:40,
+		width:200,
+		top:320
+	});
+
+	// Add the button to the window
+	view.add(createAccountButton);
+
+	// Add an event listener to the create account button
+	createAccountButton.addEventListener('click', function() {
+		// Define an object, this object takes all the 
+		// input from the user and is sent to Drupal
 		var newUser = {
-			name: usernameTextfield.value,
-			pass: passwordTextfield.value,
-			mail: emailTextfield.value,
-		}
+			"name": usernameTextfield.value,
+			"pass": passwordTextfield.value,
+			"mail": emailTextfield.value,
+			"field_fullname": {
+				"und": [{"value": nameTextfield.value}]
+			}
+		};
 		
-		var account = JSON.stringify(newUser);
+		// Define the URL to register this user
+		var url = REST_PATH + "user/register.json";
+		
+		// Use $.ajax to POST the new user
+		$.ajax({
+			type: "POST",
+			url: url,
+			dataType: "json",
+			data: JSON.stringify(newUser),
+			contentType: "application/json",
+			// On success we pass the response as res
+			success: function(res) {
 				
-		// Define the url which contains the full url
-		// in this case, we'll connecting to http://example.com/api/rest/node/1.json
-		var url = REST_PATH + 'user';
-
-		// Create a conection inside the variable connection
-		var xhr = Titanium.Network.createHTTPClient();
-		
-		xhr.onerror = function(e) {
-			Ti.UI.createAlertDialog({
-				title: "Error",
-				message: e.error(),
-			}).show();
-			Ti.API.info("IN ERROR " + e.error);
-		}
-		
-		xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
-		
-		xhr.setTimeout(20000);
-		
-		// Open the connection
-		xhr.open("POST",url);
-
-		// Send the connection
-		xhr.send(newUser);
-		
-		// When the connection loads we do:
-		xhr.onload = function() {
-			// Save the status of the connection in a variable
-			// this will be used to see if we have a connection (200) or not
-			var statusCode = xhr.status;
-			
-			// Check if we have a connection
-			if(statusCode == 200) {
+				// res will be an object including the uid and the uri to the new user
+				// Alert the user the new account has been created
 				alert("Account created");
+					
+				// Services only respond with a uid and a uri, but to Drupal eyes, the user is logged in
+				// although we don't have a session id the user is logged in.
+				// Services probably should return the session id since is set once the user created the account
+				// This probably has something to do with the fact that you can create an account but it must
+				// be approved sometimes.
+				// The other way to do this would be to logout and then login the user now having a session
+				Titanium.App.Properties.setInt("userUid", res.uid);
+				Titanium.App.Properties.setInt("userName", newUser.name);
+				var user = {
+					uid: Titanium.App.Properties.getInt("userUid"),
+				}
 				
-				var response = xhr.responseText;
 				
-				// Parse (build data structure) the JSON response into an object (data)
-				var data = JSON.parse(response);
-				
-				// alert(data);
-				
-				// Set a global variable
-				Titanium.App.Properties.setInt("userUid", data.user.uid);
-				Titanium.App.Properties.setInt("userSessionId", data.sessid);
-				Titanium.App.Properties.setInt("userSessionName", data.sesion_name)
 			}
-			else {
-				alert("There was an error");
-			}
-		}
-});
+		});
+	});
+}
+

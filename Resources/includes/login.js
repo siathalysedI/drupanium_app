@@ -201,16 +201,21 @@ logoutButton.addEventListener('click', function() {
 		var statusCodeLogout = xhr3.status;
 		// Check if we have a connection
 		if(statusCodeLogout == 200) {
-			var user = {
-				uid: Titanium.App.Properties.removeProperty("userUid"),
-				sessid: Titanium.App.Properties.removeProperty("userSessionId"),
-				session_name: Titanium.App.Properties.removeProperty("userSessionName"),
-				name: Titanium.App.Properties.removeProperty("userName"),
-			}
+			Titanium.App.Properties.removeProperty("userUid");
+			Titanium.App.Properties.removeProperty("userSessionId");
+			Titanium.App.Properties.removeProperty("userSessionName");
+			Titanium.App.Properties.removeProperty("userName");
+						
 			alert("Goodbye");
 		}
 		else {
 			alert("You're not currently logged in");
+			// We remvoe all the properties since the user is requesting to logout
+			// is probably not logged in but the properties are set
+			Titanium.App.Properties.removeProperty("userUid");
+			Titanium.App.Properties.removeProperty("userSessionId");
+			Titanium.App.Properties.removeProperty("userSessionName");
+			Titanium.App.Properties.removeProperty("userName");
 		}
 	}
 });

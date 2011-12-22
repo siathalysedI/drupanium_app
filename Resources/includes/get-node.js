@@ -8,9 +8,11 @@ Ti.include('../config.js');
 // Define the variable win to contain the current window
 var win = Ti.UI.currentWindow;
 
-// Create a user variable to hold some information about the user
-var user = {
-	uid: Titanium.App.Properties.getInt("userUid", 0),
+if(Titanium.App.Properties.getInt("userUid")) {
+	// Create a user variable to hold some information about the user
+	var user = {
+		uid: Titanium.App.Properties.getInt("userUid"),
+	}
 }
 
 // Create the scrollview to contain the data
@@ -90,8 +92,10 @@ xhr.onload = function() {
 			top:1000
 		});
 
-		// Add the flag button to the view
-		view.add(flagButton);
+		if(user.uid) {
+			// Add the flag button to the view
+			view.add(flagButton);
+		}
 		
 		// Add the event listener for when the button is created
 		flagButton.addEventListener('click', function() {

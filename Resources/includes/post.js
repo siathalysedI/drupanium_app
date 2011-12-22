@@ -18,14 +18,6 @@ var win = Ti.UI.currentWindow;
 // Set the background of the window here
 win.backgroundColor = "#666";
 
-// Create a user variable to hold some information about the user
-var user = {
-	uid: Titanium.App.Properties.getInt("userUid"),
-	sessid: Titanium.App.Properties.getString("userSessionId"),
-	session_name: Titanium.App.Properties.getString("userSessionName"),
-	name: Titanium.App.Properties.getString("userName"),
-}
-
 // Create a new button to have a cancel button
 var leftButton = Ti.UI.createButton({
 	title: 'Cancel',
@@ -42,7 +34,15 @@ leftButton.addEventListener("click", function() {
 // to set the button as the left navigation button
 win.setLeftNavButton(leftButton);
 
-if(user.sessid) {
+if(Titanium.App.Properties.getInt("userUid")) {
+	// Create a user variable to hold some information about the user
+	var user = {
+		uid: Titanium.App.Properties.getInt("userUid"),
+		sessid: Titanium.App.Properties.getString("userSessionId"),
+		session_name: Titanium.App.Properties.getString("userSessionName"),
+		name: Titanium.App.Properties.getString("userName"),
+	}
+	
 	// Create a new view "view" to hold the form
 	var view = Ti.UI.createView({
 		top: 0,
